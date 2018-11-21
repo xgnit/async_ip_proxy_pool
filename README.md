@@ -20,6 +20,7 @@ install progressbar2 but not progressbar
 
 
 
+#中文版
 使用如下方式获取代理ip池
 
 ### res = Proxy().get_proxy()
