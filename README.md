@@ -17,3 +17,21 @@ as following:
 
 notes:
 install progressbar2 but not progressbar
+
+
+
+使用如下方式获取代理ip池
+
+### res = Proxy().get_proxy()
+
+这个res是一个string的list。string的形式如：'https://111.222.333.444:1234'。
+这个过程会从网络上下载一些代理ip然后和本地保存的代理ip一起测试，看它们是否还都是可用的。
+
+
+
+或者如果你只想用本地保存的代理ip。将Proxy构造函数里的update变量设为False如下：
+
+### res = Proxy(update=False).get_proxy()
+
+
+注意安装的是progressbar2而不是progressbar
