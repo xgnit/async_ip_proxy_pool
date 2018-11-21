@@ -11,14 +11,6 @@ import functools
 import progressbar
 import os
 
-
-class ProxyAgent(object):
-    def merge_dict(self, dict1, dict2):
-        return dict(dict1, **dict2)
-    def delete_file():
-        os.remove(data_path())
-
-
 class Proxy(object):
     def __init__(self, update=True):
         self.source = 'https://free-proxy-list.net/'
@@ -30,8 +22,6 @@ class Proxy(object):
         self.p_bar = None
         if update:
             self.update_proxy()
-
-
 
     @staticmethod
     def data_path():
@@ -65,7 +55,6 @@ class Proxy(object):
         return {'referer': r'https://www.google.com/', 'user-agent': user_agent[random.randint(0, 5)]}
 
     def get_proxy_from_internet(self):
-
         page = requests.get(self.source, headers=self.get_headers())
         html = etree.HTML(page.text)
         proxies = html.xpath(self.ip_element)
@@ -131,7 +120,7 @@ class Proxy(object):
 
 
 if __name__ == '__main__':
-    
+    # the default value fore update is True
     res = Proxy(update=False).get_proxy()
 
 
