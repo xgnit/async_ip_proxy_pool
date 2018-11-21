@@ -4,7 +4,7 @@ after importing the file, use the following to get the proxy pool.
 
 ### res = Proxy().get_proxy()
 
-the variable res will be a list of strings, the strings will have the format like 'https://111.222.333.444:1234'
+the variable res will be a list of strings, the strings will have the format like 'https://111.222.333.444:1234'.
 This process fetches some proxies from internet and local file and then test if they are still available.
 
 
