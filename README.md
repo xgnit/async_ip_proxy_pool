@@ -13,3 +13,7 @@ Or if you do not want to test the proxies but just use the proxies in the local 
 as following:
 
 ### res = Proxy(update=False).get_proxy()
+
+
+notes:
+install progressbar2 but not progressbar
