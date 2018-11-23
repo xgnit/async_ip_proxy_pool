@@ -32,7 +32,7 @@ class Proxy(object):
             with open(self.data_path(), "r") as f:
                 return json.load(f)
         except Exception as e:
-            print('Failed to load local proxy file: ' + str(e))
+            print('Cannot find the previous local proxy file')
             return list()
 
     def write_proxy(self, content):
