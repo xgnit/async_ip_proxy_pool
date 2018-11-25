@@ -10,6 +10,7 @@ import functools
 #this is progressbar2, so please install the progressbar2
 import progressbar
 import os
+import aiohttp
 
 class Proxy(object):
     def __init__(self, update=True):
@@ -69,7 +70,7 @@ class Proxy(object):
                 if (self.port_pattern.match(i.text)):
                     port = i.text
             if ip and port:
-                proxy_list.append('https://{0}:{1}'.format(ip, port))
+                proxy_list.append('http://{0}:{1}'.format(ip, port))
         return proxy_list
 
     def get_proxy(self):
@@ -82,15 +83,34 @@ class Proxy(object):
         proxy = list(set(proxy))
         self.proxy_no = len(proxy)
         proxy = self.test_proxy_list(proxy)
+
+        print('{} good proxies'.format(self.good_proxy_no))
+
         self.write_proxy(proxy)
 
     def print_info(self):
         print('All proxies being tested: {0}. Good proxies: {1}. Bad proxies: {2}'.format(self.proxy_no, self.good_proxy_no,
                                                                                           self.bad_proxy_no))
-    def update(self, progress):
-        self.p_bar.update(progress)
+    def update(self):
+        self.p_bar.update(self.good_proxy_no + self.bad_proxy_no)
 
     async def run(self, proxy):
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url='https://www.google.com', proxy=proxy,
+                                       headers=self.get_headers(), timeout=5) as resp:
+                    self.good_proxy_no += 1
+                    self.update()
+                    return proxy
+        except Exception as e:
+            # print(str(e))
+            self.bad_proxy_no += 1
+            self.update()
+            return None
+
+
+
+    async def run_(self, proxy):
         loop = asyncio.get_event_loop()
         try:
             proxy_for_requests = {'https': proxy}
@@ -98,12 +118,14 @@ class Proxy(object):
                                                                           headers=self.get_headers(), timeout=5,
                                                                           proxies=proxy_for_requests))
             self.good_proxy_no += 1
-            self.update(self.good_proxy_no + self.bad_proxy_no)
+            self.update()
+            # self.update(self.good_proxy_no + self.bad_proxy_no)
             # print("{} is good".format(proxy))
             return proxy
         except Exception as e:
             self.bad_proxy_no += 1
-            self.update(self.good_proxy_no + self.bad_proxy_no)
+            self.update()
+            # self.update(self.good_proxy_no + self.bad_proxy_no)
             # print("Cannot reach google: {}".format(str(e)))
             return None
 
@@ -121,7 +143,7 @@ class Proxy(object):
 
 if __name__ == '__main__':
     # the default value fore update is True
-    res = Proxy(update=False).get_proxy()
+    res = Proxy().get_proxy()
 
 
 
