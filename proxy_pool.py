@@ -94,7 +94,7 @@ class Proxy(object):
     def update(self):
         self.p_bar.update(self.good_proxy_no + self.bad_proxy_no)
 
-    async def run_(self, proxy):
+    async def run(self, proxy):
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(url='https://www.google.com', proxy=proxy,
@@ -110,7 +110,7 @@ class Proxy(object):
 
 
 
-    async def run(self, proxy):
+    async def run_(self, proxy):
         loop = asyncio.get_event_loop()
         try:
             proxy_for_requests = {'https': proxy}
