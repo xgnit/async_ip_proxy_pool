@@ -95,18 +95,18 @@ class Proxy(object):
         self.p_bar.update(self.good_proxy_no + self.bad_proxy_no)
 
     async def run(self, proxy):
-        try:
-            async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession() as session:
+            try:
                 async with session.get(url='https://www.google.com', proxy=proxy,
                                        headers=self.get_headers(), timeout=5) as resp:
                     self.good_proxy_no += 1
                     self.update()
                     return proxy
-        except Exception as e:
-            # print(str(e))
-            self.bad_proxy_no += 1
-            self.update()
-            return None
+            except Exception as e:
+                # print(str(e))
+                self.bad_proxy_no += 1
+                self.update()
+                return None
 
 
 
