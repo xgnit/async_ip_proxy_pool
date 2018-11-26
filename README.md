@@ -17,6 +17,7 @@ as following:
 
 notes:
 install progressbar2 but not progressbar
+A SSLCertVerificationError might be thrown, but it does not affect the result of the program.
 
 
 
@@ -36,3 +37,4 @@ install progressbar2 but not progressbar
 
 
 注意安装的是progressbar2而不是progressbar
+程序过程中会有SSLCertVerificationError被扔出来，这个不影响程序的结果。
