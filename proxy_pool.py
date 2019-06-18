@@ -7,10 +7,33 @@ import copy
 import asyncio
 import requests
 import functools
-#this is progressbar2, so please install the progressbar2
-import progressbar
 import os
 import aiohttp
+
+class ProgressBar(object):
+
+    @staticmethod
+    def backward_print(str):
+        sys.stdout.write("\033[33m\r{0}".format(str))
+        sys.stdout.flush()
+        sys.stdout.write('\033[4A')
+
+    @staticmethod
+    def build_progress_bar(all_ele, done_ele):
+        progress = int(round(done_ele/all_ele, 1) * 100)
+        progress_str = ''
+        for i in range(progress):
+            progress_str += '-'
+        progress_str += '>'
+        for i in range(100-progress):
+            progress_str += '_'
+        progress_str += '|'
+        return progress_str
+    @staticmethod
+    def show_progress(str, all_ele, done_ele):
+        string_to_print = ProgressBar.build_progress_bar(all_ele, done_ele)
+        string_to_print = str + string_to_print
+        ProgressBar.backward_print(string_to_print)
 
 class Proxy(object):
     def __init__(self, update=True):
@@ -101,6 +124,7 @@ class Proxy(object):
                                        headers=self.get_headers(), timeout=5) as resp:
                     self.good_proxy_no += 1
                     self.update()
+                    ProgressBar.show_progress('Proxies tested: ', self.proxy_no, self.good_proxy_no)
                     return proxy
             except Exception as e:
                 # print(str(e))
@@ -131,12 +155,12 @@ class Proxy(object):
 
     def test_proxy_list(self, proxy_list):
         print('Testing proxies...')
-        self.p_bar = progressbar.ProgressBar(max_value=self.proxy_no).start()
+        # self.p_bar = progressbar.ProgressBar(max_value=self.proxy_no).start()
         tasks = [asyncio.ensure_future(self.run(proxy)) for proxy in proxy_list]
         loop = asyncio.get_event_loop()
         loop.run_until_complete(asyncio.wait(tasks))
         res = [task.result() for task in tasks if task.result()]
-        self.p_bar.finish()
+        # self.p_bar.finish()
         return res
 
 
